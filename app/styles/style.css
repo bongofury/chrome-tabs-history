@@ -1,0 +1,23 @@
+/* TODO
+
+	- use SASS, CSS is ugly :)
+ */
+
+ul.history-tabs {
+	width: 400px;
+	min-height: 50px;
+	outline: 1px solid green;
+	position: absolute;
+	top: 10px;
+	z-index: 1000;
+	margin-left: -200px;
+	left: 50%;
+}
+
+ul.history-tabs .tab {
+	width: 100%;
+}
+
+ul.history-tabs .tab.highlighted {
+	color: red;
+}

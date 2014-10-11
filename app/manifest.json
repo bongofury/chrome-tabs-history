@@ -1,0 +1,43 @@
+{
+    "manifest_version": 2,
+    "name": "Switch tabs history",
+    "version": "0.1",
+
+    // "default_locale": "en",
+    "description": "Allows you to switch tab with history",
+
+    "author": "Edoardo Bianchi",
+
+    // TODO use event page instead of background page
+    "background": {
+        "scripts": ["scripts/background.js"]
+    },
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": ["libs/jquery-2.1.3.min.js", "libs/handlebars-v2.0.0.js", "scripts/content.js"],
+        "css": ["styles/style.css"]
+    }],
+
+    "permissions": [
+        "tabs",
+        "http://*/",
+        "https://*/"
+    ],
+
+    "commands": {
+        "switch_tab_history": {
+            "suggested_key": {
+                "default": "Ctrl+Tab",
+                "mac": "MacCtrl+Tab"
+            },
+            "description": "Go to previous tab"
+        },
+        "activate_tab": {
+            "suggested_key": {
+                "default": "Ctrl+W",
+                "mac": "MacCtrl+W"
+            },
+            "description": "Activate tab"
+        }
+    }
+}
