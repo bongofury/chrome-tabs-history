@@ -1,10 +1,14 @@
+'use strict';
 /*global chrome: false */
 
 /* TODO
-    
+
     - review code
-    - tests
     - optimize
+    - at first ctrl-tab, back should be called
+    - what is happening if I have only 1 tab?
+    - deal with remove window action
+
 
 */
 
@@ -50,6 +54,14 @@ chrome.tabs.onActivated.addListener(function(active) {
     console.info('adding to the tab stack: ' + active.windowId + ' -- ' + active.tabId);
 });
 
+chrome.tabs.onRemoved.addListener(function(tabId, infos) {
+    var removedTab = {
+        tabId: tabId,
+        windowId: infos.windowId
+    };
+    history.remove(removedTab);
+});
+
 // listen for command Ctrl+Tab
 chrome.commands.onCommand.addListener(function(command) {
     if (command === 'switch_tab_history') {
@@ -61,7 +73,7 @@ chrome.commands.onCommand.addListener(function(command) {
     }
 });
 
-chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(msg, sender) {
     if (msg.type === 'activateTab') {
         var toBeActivated = history.activateHighlighted(sender.tab.windowId);
         activateTab(toBeActivated);

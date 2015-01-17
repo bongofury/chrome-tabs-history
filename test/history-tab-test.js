@@ -34,7 +34,7 @@ test('clear', function(t) {
 	history.push(tab2);
 	history.push(tab3);
 	var expected = {};
-	expected[tab3.windowId] = {tabs: [tab3.tabId]}; 
+	expected[tab3.windowId] = {tabs: [tab3.tabId]};
 
 	t.deepEquals(history.clear(win1.id), expected, 'history window cleared');
 	t.deepEquals(history.clear(win2.id), {}, 'last history window cleared');
@@ -52,13 +52,13 @@ test('push', function(t){
 	t.ok(win.tabs, 'tabs created');
 	t.equal(win.tabs.length, 1, 'tabs length is correct');
 	t.equal(win.tabs[0], tab1.tabId, 'tabs contains the correct tab');
-	
+
 	win = history.push(tab2);
 
 	t.equal(win.tabs.length, 2, 'pushed another, tabs length is correct');
 	t.equal(win.tabs[0], tab1.tabId, 'tabs contains the correct tab');
 	t.equal(win.tabs[1], tab2.tabId, 'tabs contains the correct tab');
-	
+
 	win = history.push(tab1);
 
 	t.equal(win.tabs.length, 2, 'pushed tabs already contained, tabs length is correct');
@@ -77,7 +77,7 @@ test('back', function(t) {
 
 	t.equal(win.tabs.length, 2, 'go back, tabs length is correct');
 	t.equal(win.highlighted, 1, 'prev tab is highlighted');
-	
+
 	win = history.back(win1.id);
 
 	t.equal(win.tabs.length, 2, 'back again, tabs length is correct');
@@ -101,4 +101,20 @@ test('activate', function(t) {
 
 	t.equal(toBeActivated, tab1.tabId, 'back once then activate, correct tab activated');
 	t.throws(history.activateHighlighted(win1.id), 'call activate without calling back first, throws an error \'cause highlighted pointer is not set');
+});
+
+test('remove', function(t) {
+	t.plan(3);
+
+	history.clear();
+	history.push(tab1);
+	history.push(tab2);
+	history.push(tab1);
+	var win = history.remove(tab2);
+
+	t.equal(win.tabs.length, 1, 'tab remove, tabs length is correct');
+	t.equal(win.tabs[0], tab1.tabId, 'window contains the correct tabs');
+
+	win = history.remove(tab1);
+	t.equal(typeof win, 'undefined', 'empty window has been removed from history');
 });

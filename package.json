@@ -4,7 +4,7 @@
   "description": "Chrome browser extension that keep an history of opened tabs and let the user move trought it",
   "main": "background.js",
   "scripts": {
-    "test": "test",
+    "test": "npm run compile && node test/*-test.js | ./node_modules/.bin/tap-spec",
     "compile": "browserify app/scripts/background-dev.js -o app/scripts/background.js"
   },
   "keywords": [

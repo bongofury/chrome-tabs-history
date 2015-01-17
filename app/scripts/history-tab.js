@@ -6,9 +6,6 @@
             History[winId] = {
                 tabs: []
             };
-            /*-- remove for production --*/
-            // listenDev(History[winId]);
-            /*-- end remove for production --*/
         }
         return History[winId];
     }
@@ -19,48 +16,46 @@
         }
     }
 
-    function _pointPrevious(win) {
-        if (!win.hasOwnProperty('highlighted')) {
-            win.highlighted = win.tabs.length - 1;
+    function _pointPrevious(hWin) {
+        if (!hWin.hasOwnProperty('highlighted')) {
+            hWin.highlighted = hWin.tabs.length - 1;
         } else {
-            win.highlighted = (win.tabs.length - 1 + win.highlighted) % win.tabs.length;
+            hWin.highlighted = (hWin.tabs.length - 1 + hWin.highlighted) % hWin.tabs.length;
         }
-        return win;
-    }
-    
-    function _pushToTop(win, tab) {
-        var tabs = win.tabs;
-        if (tabs.indexOf(tab) >= 0) {
-            tabs.splice(tabs.indexOf(tab), 1);
-        }
-        tabs.push(tab);
+        return hWin;
     }
 
-    /*-- remove for production --*/
-    // function listenDev(array) {
-    //     Array.observe(array, function() {
-    //         console.log(array, ' -- len: ', array.length);
-    //     });
-    // }
-    /*-- end remove for production --*/
+    function _pushToTop(hWin, tabId) {
+        _removeTab(hWin, tabId);
+        hWin.tabs.push(tabId);
+        return hWin;
+    }
+
+    function _removeTab(hWin, tabId) {
+        var tabs = hWin.tabs;
+        if (tabs.indexOf(tabId) >= 0) {
+            tabs.splice(tabs.indexOf(tabId), 1);
+        }
+        return hWin;
+    }
 
     module.exports = {
         push: function(tab) {
-            var win = _getWindow(tab.windowId);
-            // avoid re-add to history the tab restored just now
-            if (win[win.length - 1] !== tab.tabId) {
-                _pushToTop(win, tab.tabId);
+            var hWin = _getWindow(tab.windowId);
+            // avoid re-adding to history the tab restored just now
+            if (hWin[hWin.length - 1] !== tab.tabId) {
+                _pushToTop(hWin, tab.tabId);
             }
-            return win;
+            return hWin;
         },
         back: function(winId) {
-            var win = _getWindow(winId);
-            return _pointPrevious(win);
+            var hWin = _getWindow(winId);
+            return _pointPrevious(hWin);
         },
         activateHighlighted: function(winId) {
-            var win = _getWindow(winId);
-            var toBeActivated = win.tabs[win.highlighted];
-            delete win.highlighted;
+            var hWin = _getWindow(winId);
+            var toBeActivated = hWin.tabs[hWin.highlighted];
+            delete hWin.highlighted;
             return toBeActivated;
         },
         clear: function(winId) {
@@ -70,7 +65,16 @@
                 History = {};
             }
             return History;
-        }    
+        },
+        remove: function(tab) {
+            if (tab) {
+                var hWin = _getWindow(tab.windowId);
+                _removeTab(hWin, tab.tabId, true);
+                if (hWin.tabs.length === 0) {
+                    _removeWindow(tab.windowId);
+                }
+                return History[tab.windowId];
+            }
+        }
     };
-
 })();

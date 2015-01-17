@@ -1,6 +1,7 @@
 /*TODO
 
 	- remove jquery and handlebars, too heavy
+	- style tab list
 
 */
 
@@ -51,6 +52,6 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     /* If the received message has the expected format... */
     if (msg.type && (msg.type === 'showTabList')) {
         tabsList(msg.tabs);
-        
+
     }
 });
