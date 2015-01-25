@@ -69,7 +69,7 @@
         remove: function(tab) {
             if (tab) {
                 var hWin = _getWindow(tab.windowId);
-                _removeTab(hWin, tab.tabId, true);
+                _removeTab(hWin, tab.tabId);
                 if (hWin.tabs.length === 0) {
                     _removeWindow(tab.windowId);
                 }

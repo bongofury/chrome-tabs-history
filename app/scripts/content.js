@@ -1,28 +1,38 @@
+/* global chrome: false, Handlebars: false */
+
 /*TODO
 
-	- remove jquery and handlebars, too heavy
+	- remove handlebars, too heavy
 	- style tab list
 
 */
 
 var listInPage = false;
+var containerProps = {
+	tag: 'ul',
+	id: 'chrome-ext-history-tabs'
+};
 
 function tabsList(tabs) {
 	console.log('show tablist!');
 
-	var $container = $('body > ul.history-tabs');
+	var container = document.getElementById(containerProps.id);
 
-	if (!$container.length) {
-		var $container = $('<ul />').addClass('history-tabs');
-		$('body').append($container);
+	if (!container) {
+		container = document.createElement(containerProps.tag);
+		container.id = containerProps.id;
+		document.body.appendChild(container);
 	}
 
-	$container.html(templateList(tabs));
+	container.innerHTML = templateList(tabs);
 	listInPage = true;
-};
+}
 
 function removeTabsList() {
-	$('body > ul.history-tabs').remove();
+	var container = document.getElementById(containerProps.id);
+	if (!!container) {
+		container.parentNode.removeChild(container);
+	}
 	listInPage = false;
 }
 
@@ -52,6 +62,5 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     /* If the received message has the expected format... */
     if (msg.type && (msg.type === 'showTabList')) {
         tabsList(msg.tabs);
-
     }
 });
