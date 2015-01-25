@@ -67,26 +67,35 @@ test('push', function(t){
 });
 
 test('back', function(t) {
-	t.plan(6);
+	t.plan(8);
+
+	history.clear();
+	history.push(tab1);
+
+	var win = history.back(win1.id);
+
+	t.equal(win.tabs.length, 1, 'go back, tabs length is correct');
+	t.equal(win.highlighted, 0, 'prev tab is highlighted');
 
 	history.clear();
 	history.push(tab1);
 	history.push(tab2);
 	history.push(tab1);
-	var win = history.back(win1.id);
-
-	t.equal(win.tabs.length, 2, 'go back, tabs length is correct');
-	t.equal(win.highlighted, 1, 'prev tab is highlighted');
 
 	win = history.back(win1.id);
 
-	t.equal(win.tabs.length, 2, 'back again, tabs length is correct');
+	t.equal(win.tabs.length, 2, 'go back, tabs length is correct');
 	t.equal(win.highlighted, 0, 'prev tab is highlighted');
 
 	win = history.back(win1.id);
 
 	t.equal(win.tabs.length, 2, 'back again, tabs length is correct');
 	t.equal(win.highlighted, 1, 'prev tab is highlighted');
+
+	win = history.back(win1.id);
+
+	t.equal(win.tabs.length, 2, 'back again, tabs length is correct');
+	t.equal(win.highlighted, 0, 'prev tab is highlighted');
 });
 
 test('activate', function(t) {
@@ -99,7 +108,7 @@ test('activate', function(t) {
 	history.back(win1.id);
 	var toBeActivated = history.activateHighlighted(win1.id);
 
-	t.equal(toBeActivated, tab1.tabId, 'back once then activate, correct tab activated');
+	t.equal(toBeActivated, tab2.tabId, 'back once then activate, correct tab activated');
 	t.throws(history.activateHighlighted(win1.id), 'call activate without calling back first, throws an error \'cause highlighted pointer is not set');
 });
 

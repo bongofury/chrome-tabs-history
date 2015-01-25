@@ -18,7 +18,7 @@
 
     function _pointPrevious(hWin) {
         if (!hWin.hasOwnProperty('highlighted')) {
-            hWin.highlighted = hWin.tabs.length - 1;
+            hWin.highlighted = (hWin.tabs.length === 1) ? 0 : hWin.tabs.length - 2;
         } else {
             hWin.highlighted = (hWin.tabs.length - 1 + hWin.highlighted) % hWin.tabs.length;
         }
