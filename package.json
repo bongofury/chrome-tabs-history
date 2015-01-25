@@ -1,7 +1,7 @@
 {
   "name": "chrome-tabs-history",
   "version": "1.0.0",
-  "description": "Chrome extension that keeps an history of opened tabs and let the user move through it",
+  "description": "Chrome extension that keeps an history of opened tabs and lets the user move through it",
   "main": "background.js",
   "scripts": {
     "test": "npm run compile-src && node test/*-test.js | ./node_modules/.bin/tap-spec",
