@@ -8,37 +8,39 @@
 
 (function() {
 
-	var listInPage = false;
-	var containerProps = {
+	var _listInPage = false;
+	var _CONTAINER = {
 		tag: 'ul',
-		id: 'chrome-ext-history-tabs'
+		id: 'chrome-ext-history-tabs',
+		childClass: 'tab',
+		highlightedChildClass: 'highlighted'
 	};
 
 	function tabsList(tabs) {
 		console.log('show tablist!');
 
-		var container = document.getElementById(containerProps.id);
+		var container = document.getElementById(_CONTAINER.id);
 
 		if (!container) {
-			container = document.createElement(containerProps.tag);
-			container.id = containerProps.id;
+			container = document.createElement(_CONTAINER.tag);
+			container.id = _CONTAINER.id;
 			document.body.appendChild(container);
 		}
 
 		container.innerHTML = templateList(tabs);
-		listInPage = true;
+		_listInPage = true;
 	}
 
 	function removeTabsList() {
-		var container = document.getElementById(containerProps.id);
+		var container = document.getElementById(_CONTAINER.id);
 		if (!!container) {
 			container.parentNode.removeChild(container);
 		}
-		listInPage = false;
+		_listInPage = false;
 	}
 
 	function templateList(tabs) {
-		var source = '{{#each this}}<li class="tab {{#if _highlighted}}highlighted{{/if}}">{{title}}</li>{{/each}}';
+		var source = '{{#each this}}<li class="' + _CONTAINER.childClass + '  {{#if _highlighted}}' + _CONTAINER.highlightedChildClass + '{{/if}}">{{title}}</li>{{/each}}';
 		var template = Handlebars.compile(source);
 		console.log(tabs);
 		var html = template(tabs);
@@ -48,7 +50,7 @@
 
 	(function listenForCtrlRelease() {
 		window.addEventListener('keyup', function(e) {
-			if (e.keyCode === 17 && listInPage) {
+			if (e.keyCode === 17 && _listInPage) {
 				console.log('remove list');
 				removeTabsList();
 				chrome.runtime.sendMessage({
