@@ -17,7 +17,7 @@
     }
 
     function _pointPrevious(hWin) {
-        if (!hWin.hasOwnProperty('highlighted')) {
+        if (!hWin.hasOwnProperty('highlighted') || isNaN(hWin.highlighted)) {
             hWin.highlighted = (hWin.tabs.length === 1) ? 0 : hWin.tabs.length - 2;
         } else {
             hWin.highlighted = (hWin.tabs.length - 1 + hWin.highlighted) % hWin.tabs.length;
@@ -50,7 +50,7 @@
         },
         back: function(winId) {
             var hWin = _getWindow(winId);
-            return _pointPrevious(hWin);
+            return (hWin.tabs.length === 0) ? null : _pointPrevious(hWin);
         },
         activateHighlighted: function(winId) {
             var hWin = _getWindow(winId);

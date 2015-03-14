@@ -24,27 +24,23 @@ function activateTab(tabId) {
     }
 }
 
-function showTabList(historyWin) {
-    chrome.windows.getCurrent({
-        populate: true
-    }, function(win) {
-        var activeTab = win.tabs.filter(function(tab) {
-            return tab.active;
-        });
-        var inHistoryTabs = win.tabs.filter(function(tab) {
-            return historyWin.tabs.indexOf(tab.id) !== -1;
-        });
+function showTabList(currentWin, historyWin) {
+    var activeTab = currentWin.tabs.filter(function(tab) {
+        return tab.active;
+    });
+    var inHistoryTabs = currentWin.tabs.filter(function(tab) {
+        return historyWin.tabs.indexOf(tab.id) !== -1;
+    });
 
-        inHistoryTabs.sort(function(a, b) {
-            return historyWin.tabs.indexOf(a.id) - historyWin.tabs.indexOf(b.id);
-        });
+    inHistoryTabs.sort(function(a, b) {
+        return historyWin.tabs.indexOf(a.id) - historyWin.tabs.indexOf(b.id);
+    });
 
-        inHistoryTabs[historyWin.highlighted]._highlighted = true;
+    inHistoryTabs[historyWin.highlighted]._highlighted = true;
 
-        chrome.tabs.sendMessage(activeTab[0].id, {
-            type: 'showTabList',
-            tabs: inHistoryTabs
-        });
+    chrome.tabs.sendMessage(activeTab[0].id, {
+        type: 'showTabList',
+        tabs: inHistoryTabs
     });
 }
 
@@ -65,9 +61,12 @@ chrome.tabs.onRemoved.addListener(function(tabId, infos) {
 // listen for command Ctrl+Tab
 chrome.commands.onCommand.addListener(function(command) {
     if (command === 'switch_tab_history') {
-        chrome.windows.getCurrent(function(win) {
-            if (win && win.id) {
-                showTabList(history.back(win.id));
+        chrome.windows.getCurrent({
+            populate: true
+        }, function(win) {
+            var hystoryWin = history.back(win.id);
+            if (win && win.id && hystoryWin) {
+                showTabList(win, hystoryWin);
             }
         });
     }
