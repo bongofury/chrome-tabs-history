@@ -12,7 +12,7 @@
 
 */
 
-var history = require('./history-tab.js');
+var h = require('./history-tab.js');
 
 function activateTab(tabId) {
     if (typeof tabId !== 'undefined') {
@@ -46,8 +46,8 @@ function showTabList(currentWin, historyWin) {
 
 // when a new tab is selected, the history is updated
 chrome.tabs.onActivated.addListener(function(active) {
-    history.push(active);
-    console.info('adding to the tab stack: ' + active.windowId + ' -- ' + active.tabId);
+    h.push(active);
+    console.info('ADD: ' + active.windowId + ' -- ' + active.tabId);
 });
 
 chrome.tabs.onRemoved.addListener(function(tabId, infos) {
@@ -55,7 +55,8 @@ chrome.tabs.onRemoved.addListener(function(tabId, infos) {
         tabId: tabId,
         windowId: infos.windowId
     };
-    history.remove(removedTab);
+    h.remove(removedTab);
+    console.info('REMOVE: ' + removedTab.windowId + ' -- ' + removedTab.tabId);
 });
 
 // listen for command Ctrl+Tab
@@ -64,7 +65,7 @@ chrome.commands.onCommand.addListener(function(command) {
         chrome.windows.getCurrent({
             populate: true
         }, function(win) {
-            var hystoryWin = history.back(win.id);
+            var hystoryWin = h.back(win.id);
             if (win && win.id && hystoryWin) {
                 showTabList(win, hystoryWin);
             }
@@ -74,7 +75,7 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(function(msg, sender) {
     if (msg.type === 'activateTab') {
-        var toBeActivated = history.activateHighlighted(sender.tab.windowId);
+        var toBeActivated = h.activateHighlighted(sender.tab.windowId);
         activateTab(toBeActivated);
     }
 });
