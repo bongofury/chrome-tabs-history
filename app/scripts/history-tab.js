@@ -17,10 +17,12 @@
     }
 
     function _pointPrevious(hWin) {
-        if (!hWin.hasOwnProperty('highlighted') || isNaN(hWin.highlighted)) {
-            hWin.highlighted = (hWin.tabs.length === 1) ? 0 : hWin.tabs.length - 2;
-        } else {
-            hWin.highlighted = (hWin.tabs.length - 1 + hWin.highlighted) % hWin.tabs.length;
+        if (hWin.tabs.length > 0) {
+            if (!hWin.hasOwnProperty('highlighted') || isNaN(hWin.highlighted)) {
+                hWin.highlighted = (hWin.tabs.length === 1) ? 0 : hWin.tabs.length - 2;
+            } else {
+                hWin.highlighted = (hWin.tabs.length - 1 + hWin.highlighted) % hWin.tabs.length;
+            }
         }
         return hWin;
     }
@@ -50,7 +52,7 @@
         },
         back: function(winId) {
             var hWin = _getWindow(winId);
-            return (hWin.tabs.length === 0) ? null : _pointPrevious(hWin);
+            return _pointPrevious(hWin);
         },
         activateHighlighted: function(winId) {
             var hWin = _getWindow(winId);
