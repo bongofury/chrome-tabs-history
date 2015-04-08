@@ -9,7 +9,6 @@
     - what is happening if I have only 1 tab?
     - deal with remove window action
 
-
 */
 
 var h = require('./history-tab.js');
@@ -47,7 +46,6 @@ function showTabList(currentWin, historyWin) {
 // when a new tab is selected, the history is updated
 chrome.tabs.onActivated.addListener(function(active) {
     h.push(active);
-    console.info('ADD: ' + active.windowId + ' -- ' + active.tabId);
 });
 
 chrome.tabs.onRemoved.addListener(function(tabId, infos) {
@@ -56,7 +54,15 @@ chrome.tabs.onRemoved.addListener(function(tabId, infos) {
         windowId: infos.windowId
     };
     h.remove(removedTab);
-    console.info('REMOVE: ' + removedTab.windowId + ' -- ' + removedTab.tabId);
+});
+
+chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
+	chrome.windows.getCurrent(function(win) {
+		h.remove({
+			tabId: removedTabId,
+			windowId: win.id
+		});
+	});
 });
 
 // listen for command Ctrl+Tab
