@@ -1,3 +1,4 @@
+'use strict';
 /* global chrome: false, Handlebars: false */
 
 /*TODO
@@ -55,16 +56,14 @@
 				removeTabsList();
 				chrome.runtime.sendMessage({
 					type: 'activateTab'
-				}, function(response) {
-					console.log(response.farewell);
 				});
 			}
 		});
 	})();
 
-	/* Listen for messages */
-	chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-		/* If the received message has the expected format... */
+	// listen for messages
+	chrome.runtime.onMessage.addListener(function(msg) {
+		// if the received message has the expected format...
 		if (msg.type && (msg.type === 'showTabList')) {
 			tabsList(msg.tabs);
 		}
