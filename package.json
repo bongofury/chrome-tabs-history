@@ -4,10 +4,10 @@
   "description": "Chrome extension that keeps an history of opened tabs and lets the user move through it",
   "main": "background.js",
   "scripts": {
-    "test": "npm run compile-src && node test/*-test.js | ./node_modules/.bin/tap-spec",
-    "compile-src": "browserify app/scripts/background-dev.js -o app/scripts/background.js",
+    "test": "node test/*-test.js | ./node_modules/.bin/tap-spec",
+    "compile-src": "browserify app/scripts/background-dev.js -o app/scripts/background.js && browserify app/scripts/content-dev.js -o app/scripts/content.js",
     "compile-css": "./node_modules/.bin/node-sass app/styles/style.scss app/styles/style.css",
-    "build": "npm run test && npm run compile-css"
+    "build": "npm run test && npm run compile-src && npm run compile-css"
   },
   "keywords": [
     "chrome",
@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "browserify": "^8.1.0",
+    "dot": "^1.0.3",
     "node-sass": "^2.0.0-beta",
     "tap-spec": "^2.1.2",
     "tape": "^3.0.3"

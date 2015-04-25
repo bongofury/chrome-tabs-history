@@ -1,14 +1,10 @@
 'use strict';
-/* global chrome: false, Handlebars: false */
-
-/*TODO
-
-	- remove handlebars, too heavy
-
-	*/
+/*jshint multistr: true */
+/* global chrome: false*/
 
 (function() {
 
+	var dot = require('dot');
 	var _listInPage = false;
 	var _CONTAINER = {
 		tag: 'ul',
@@ -41,8 +37,12 @@
 	}
 
 	function templateList(tabs) {
-		var source = '{{#each this}}<li class="' + _CONTAINER.childClass + '  {{#if _highlighted}}' + _CONTAINER.highlightedChildClass + '{{/if}}">{{title}}</li>{{/each}}';
-		var template = Handlebars.compile(source);
+		var source = 	'{{~it :tab}}\
+							<li class="' + _CONTAINER.childClass + '  {{? tab._highlighted }}' + _CONTAINER.highlightedChildClass + '{{?}}">\
+								{{=tab.title}}\
+							</li>\
+						{{~}}';
+		var template = dot.template(source);
 		console.log(tabs);
 		var html = template(tabs);
 
