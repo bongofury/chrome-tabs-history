@@ -14,7 +14,7 @@
     },
     "content_scripts": [{
         "matches": ["*://*/*"],
-        "js": ["libs/handlebars-v2.0.0.js", "scripts/content.js"],
+        "js": ["scripts/content.js"],
         "css": ["styles/style.css"]
     }],
 
