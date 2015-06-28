@@ -35,12 +35,15 @@ function showTabList(currentWin, historyWin) {
         return historyWin.tabs.indexOf(a.id) - historyWin.tabs.indexOf(b.id);
     });
 
-    inHistoryTabs[historyWin.highlighted]._highlighted = true;
 
-    chrome.tabs.sendMessage(activeTab[0].id, {
-        type: 'showTabList',
-        tabs: inHistoryTabs
-    });
+    if (!isNaN(historyWin.highlighted) && inHistoryTabs[historyWin.highlighted]) {
+        inHistoryTabs[historyWin.highlighted]._highlighted = true;
+
+        chrome.tabs.sendMessage(activeTab[0].id, {
+            type: 'showTabList',
+            tabs: inHistoryTabs
+        });
+    }
 }
 
 // when a new tab is selected, the history is updated
